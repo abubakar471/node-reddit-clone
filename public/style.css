@@ -1,0 +1,108 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+}
+
+.navBar{
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 .125rem 1px rgba(0,0,0,0.1);
+    background: white;
+    z-index: 10000;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+}
+
+.logo a{
+    color: rgb(158, 158, 158);
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.logo a span{
+    color: tomato;
+}
+
+.navLinks{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.navLinks li a{
+    text-decoration: none;
+    color: rgb(158, 158, 158);
+    margin: 0 5px;
+}
+
+.new-post-form{
+    width: 80%;
+    margin: 20px auto;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.new-post-form form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.new-post-form form input{
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid rgba(0,0,0,0.4);
+    outline: none;
+    width: 400px;
+}
+.new-post-form form textarea{
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid rgba(0,0,0,0.4);
+    outline: none;
+    width: 400px;
+    height: 300px;
+    resize: none;
+}
+.new-post-form button{
+    padding: 10px;
+    width: 100%;
+    background-color: rgb(62, 172, 199);
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.new-post-form form button:hover{
+    background-color: rgb(100, 205, 231);
+}
+
+footer div{
+    width: 80%;
+    margin: auto;
+}
+
+footer div p{
+    color: rgb(158, 158, 158);
+}

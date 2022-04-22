@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    {{> header}}
+
+    <div class="new-post-form">
+        {{#if message}}
+            <h1>{{message}}</h1>
+        {{/if}}
+        <form action="/posts/new" method="post">
+            <input type="text" name="title" placeholder="enter a title for your post">
+            <input type="text" name="url" placeholder="url">
+            <textarea type="text" name="summary" placeholder="what's on your mind"></textarea>
+            <button type="submit">post</button>
+        </form>
+    </div>
+
+    {{> footer}}
+</body>
+
+</html>
