@@ -13,11 +13,13 @@
     {{> header}}
     <div class="container">
 
-        {{#each posts}}
-        <div class="posts-card">
-            <a href="/posts/{{this._id}}">{{title}}</a>
+        {{#if post}}
+        <div class="posts-show-card">
+            <h1>{{post.title}}</h1>
+            <i>{{post.createdAt}}</i>
+            <p>{{post.summary}}</p>
         </div>
-        {{/each}}
+        {{/if}}
     </div>
     {{> footer}}
 </body>

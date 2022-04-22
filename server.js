@@ -23,8 +23,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
-app.get('/', (req,res) => {
-    Post.find({}).lean()
+app.get('/', async(req,res) => {
+    Post.find({}).lean().sort({'createdAt' : -1})
         .then((posts) => {
             res.render('posts_index',{
                 posts
@@ -37,6 +37,15 @@ app.get('/', (req,res) => {
 app.get('/posts/new', (req,res) => {
     res.render('posts_new',{
         pageTitle : "New post"
+    })
+})
+app.get('/posts/:id', async(req,res) => {
+    var url = req.params.id;
+    var post = await Post.findOne({'_id' : url});
+    console.log(post)
+    res.render('posts_show',{
+        pageTitle : post.title,
+        post
     })
 })
 app.post('/posts/new', (req,res) => {

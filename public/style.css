@@ -98,6 +98,32 @@
     background-color: rgb(100, 205, 231);
 }
 
+.posts-show-card{
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 .125rem .125rem rgba(0,0,0,0.4);
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.posts-card{
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 .125rem .125rem rgba(0,0,0,0.4);
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.posts-show-card h1{
+    color: rgb(100, 205, 231);
+}
+.posts-show-card i{
+    color: rgb(158, 158, 158);
+    font-size: 12px;
+}
+.posts-show-card p{
+    color: rgb(110, 110, 110);
+}
 footer div{
     width: 80%;
     margin: auto;
