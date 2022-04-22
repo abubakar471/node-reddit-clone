@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    {{> header}}
+    {{#each posts}}
+        <h1>{{title}}</h1> <br>
+        <a href="{{this.url}}" target="blank">{{this.url}}</a>
+    {{/each}}
+    {{> footer}}
+</body>
+</html>

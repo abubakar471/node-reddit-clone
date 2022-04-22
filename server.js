@@ -24,7 +24,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
 app.get('/', (req,res) => {
-    res.render('home');
+    Post.find({}).lean()
+        .then((posts) => {
+            res.render('posts_index',{
+                posts
+            })
+        })
+        .catch((err) => {
+            console.log(err.message);
+        })
 });
 app.get('/posts/new', (req,res) => {
     res.render('posts_new',{
