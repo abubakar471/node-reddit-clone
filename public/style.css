@@ -124,6 +124,26 @@
 .posts-show-card p{
     color: rgb(110, 110, 110);
 }
+.post-comment{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+}
+.post-comment input{
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    outline: none;
+}
+.post-comment button{
+    padding: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: white;
+    background-color: rgb(62, 172, 199);
+    margin: 5px 0;
+}
 footer div{
     width: 80%;
     margin: auto;

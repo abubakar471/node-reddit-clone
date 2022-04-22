@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    {{> header}}
+    <div class="container">
+
+        {{#if post}}
+        <div class="posts-show-card">
+            <h1>{{post.title}}</h1>
+            <i>{{post.createdAt}}</i>
+            <p>{{post.summary}}</p>
+        </div>
+        {{/if}} 
+
+
+        <form action="/posts/{{post._id}}/comments" method="post" class="post-comment">
+            {{#if message}}
+                <h3>{{message}}</h3>
+            {{/if}}
+            <input type="text" name="content" placeholder="comment">
+            <button type="submit">comment</button>
+        </form>
+
+
+        
+        {{!-- display commments --}}
+
+        <div class="comments-show">
+            {{#each post.comments}}
+                <div class="comment-card">
+                        {{this.content}}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+    {{> footer}}
+</body>
+
+</html>
