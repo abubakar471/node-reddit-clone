@@ -48,15 +48,24 @@ app.get('/posts/:id', async(req,res) => {
         post
     })
 })
+app.get('/n/:subreddit', (req,res) => {
+    Post.find({'subreddit' : req.params.subreddit}).lean()
+        .then((posts) => {
+            res.render('posts_index',{
+                posts
+            })
+        })
+        .catch((err) => console.log(err))
+})
 app.post('/posts/new', (req,res) => {
-    const {title, url, summary} = req.body;
-    if(!title || !url || !summary){
+    const {title, url, summary, subreddit} = req.body;
+    if(!title || !url || !summary || !subreddit){
         res.render('posts_new',{
             pageTitle : "New post",
             message : "please fill all fields"
         })
     }
-    var newPost = new Post({title, url, summary});
+    var newPost = new Post({title, url, summary, subreddit});
     newPost.save();
     res.redirect('/');
 })
