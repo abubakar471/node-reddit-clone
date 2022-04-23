@@ -81,6 +81,10 @@ app.get('/signin', async (req, res) => {
         pageTitle: "sign_in"
     })
 })
+app.get('/signout', (req,res) => {
+    res.clearCookie('nToken');
+    res.redirect('/');
+})
 app.post('/posts/new', (req, res) => {
     const { title, url, summary, subreddit } = req.body;
     if (!title || !url || !summary || !subreddit) {
@@ -169,6 +173,11 @@ app.post('/signin', async (req, res) => {
         if (user) {
             if (await bcrypt.compare(password, user.password)) {
                 // req.session.user = user;
+                const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, {
+                    expiresIn: '60 days',
+                  });
+                  // Set a cookie and redirect to root
+                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
                 res.redirect('/');
             } else {
                 res.render('sign_in', {
