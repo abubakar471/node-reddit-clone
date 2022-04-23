@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    {{> header}}
+    <div class="container">
+        {{!-- <div class="user-items">
+            <ul>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/sign-up">Sign Up</a></li>
+            </ul>
+        </div> --}}
+
+        <div class="post-container">
+
+            <form action="/signup" method="post" class="sign-up">
+            <h1>create a new account</h1>
+            {{#if message}}
+                <h4 class="{{classList}}">{{message}}</h4>
+            {{/if}}
+                <input type="text" name="username" placeholder="username">
+                <input type="text" name="email" placeholder="e-mail">
+                <input type="text" name="password" placeholder="password">
+                <button type="submit">sign up</button>
+                <p>🔑 already have an account. <a href="/signin">signin</a> instead</p>
+            </form>
+        </div>
+    </div>
+    {{> footer}}
+</body>
+
+</html>

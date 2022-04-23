@@ -1,7 +1,7 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const commentSchema = new Schema({
+const commentSchema = new mongoose.Schema({
   content: { type: String, required: true },
 }, { timestamps: true });
 
-module.exports = model('Comment', commentSchema);
+module.exports = mongoose.model('Comment', commentSchema);

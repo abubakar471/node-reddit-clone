@@ -11,7 +11,7 @@
 
 <body>
     {{> header}}
-    <div class="container">
+    <div class="post-show-container">
 
         {{#if post}}
         <div class="posts-show-card">
@@ -37,7 +37,11 @@
         <div class="comments-show">
             {{#each post.comments}}
                 <div class="comment-card">
-                        {{this.content}}
+                        
+                        <p>
+                            {{this.content}}
+                        </p>
+
                 </div>
             {{/each}}
         </div>

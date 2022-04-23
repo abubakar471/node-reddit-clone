@@ -7,8 +7,27 @@
 .container{
     width: 80%;
     margin: auto;
+    display: flex;
+    justify-content: space-around;
 }
-
+.user-items{
+    display: flex;
+    align-items:initial;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-top: 80px;
+}
+.user-items ul{
+    list-style: none;
+}
+.user-items ul li a{
+    text-decoration: none;
+    color: rgb(50, 188, 206);
+}
+.post-show-container{
+    width:80%;
+    margin: auto;
+}
 .navBar{
     position: sticky;
     position: -webkit-sticky;
@@ -143,6 +162,56 @@
     color: white;
     background-color: rgb(62, 172, 199);
     margin: 5px 0;
+}
+
+.comment-card{
+    border-radius: 5px;
+    box-shadow: 0 .0125rem 1px rgba(0,0,0,0.6);
+    padding: 10px;
+    margin: 10px 0;
+    width: 600px;
+}
+.comment-card p{
+    color: #555;
+}
+.sign-up{
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+.sign-up h1{
+    color: rgb(100, 205, 231);
+}
+.sign-up input{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    outline: none;
+    margin: 10px 0;
+}
+.sign-up button{
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    background-color: rgb(50, 188, 206);
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+.sign-up p{
+    color: #555;
+    margin: 10px 0;
+}
+.sign-up p a{
+    color: rgb(50, 188, 206);
+}
+.danger-msg{
+    color: rgb(241, 101, 101);
+}
+.success-msg{
+    color: rgb(52, 197, 154);
 }
 footer div{
     width: 80%;
