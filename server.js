@@ -12,10 +12,26 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config();
 
 
+const checkAuth = (req, res, next) => {
+    console.log('checking authentication');
+    if (typeof req.cookies.nToken === 'undefined' || req.cookies.nToken === null) {
+        req.user = null;
+    } else {
+        const token = req.cookies.nToken;
+        const decodedToken = jwt.decode(token, { complete: true }) || {};
+        console.log(decodedToken);
+        req.user = decodedToken.payload;
+    }
+
+    next();
+}
+
+// middlewares
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(checkAuth);
 
 // database
 mongoose.connect(DATABASE)
@@ -27,16 +43,17 @@ const User = require('./models/User');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
 
-
-
+// view engine
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/layouts');
 
 app.get('/', async (req, res) => {
+    const currentUser = req.user;
     Post.find({}).lean().sort({ 'createdAt': -1 })
         .then((posts) => {
             res.render('posts_index', {
-                posts
+                posts,
+                currentUser
             })
         })
         .catch((err) => {
@@ -44,17 +61,28 @@ app.get('/', async (req, res) => {
         })
 });
 app.get('/posts/new', (req, res) => {
-    res.render('posts_new', {
-        pageTitle: "New post"
-    })
+    const currentUser = req.user;
+    if(currentUser){
+        res.render('posts_new', {
+            pageTitle: "New post",
+            currentUser
+        })
+    } else{
+        res.render('sign_in', {
+            pageTitle: "sign in to your account"
+        })
+    }
+    
 })
 app.get('/posts/:id', async (req, res) => {
     var url = req.params.id;
+    const currentUser = req.user;
     Post
         .findById(req.params.id).lean().populate('comments')
         .then((post) => {
             res.render('post_show', {
-                post
+                post,
+                currentUser
             })
         })
         .catch((err) => {
@@ -62,10 +90,12 @@ app.get('/posts/:id', async (req, res) => {
         });
 })
 app.get('/n/:subreddit', (req, res) => {
+    const currentUser = req.user;
     Post.find({ 'subreddit': req.params.subreddit }).lean()
         .then((posts) => {
             res.render('posts_index', {
-                posts
+                posts,
+                currentUser
             })
         })
         .catch((err) => console.log(err))
@@ -81,7 +111,7 @@ app.get('/signin', async (req, res) => {
         pageTitle: "sign_in"
     })
 })
-app.get('/signout', (req,res) => {
+app.get('/signout', (req, res) => {
     res.clearCookie('nToken');
     res.redirect('/');
 })
@@ -142,7 +172,7 @@ app.post('/signup', async (req, res) => {
                 console.log(token);
                 res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
                 return res.redirect('/')
-                
+
             })
             .catch(err => console.log(err))
         // req.session.user = newUser;
@@ -175,9 +205,9 @@ app.post('/signin', async (req, res) => {
                 // req.session.user = user;
                 const token = jwt.sign({ _id: user._id, username: user.username }, process.env.SECRET, {
                     expiresIn: '60 days',
-                  });
-                  // Set a cookie and redirect to root
-                  res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
+                });
+                // Set a cookie and redirect to root
+                res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
                 res.redirect('/');
             } else {
                 res.render('sign_in', {
