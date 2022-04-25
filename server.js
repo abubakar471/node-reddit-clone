@@ -1,25 +1,24 @@
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const session = require('express-session');
 const hbs = require('hbs');
 const PORT = process.env.PORT || 3000;
 const DATABASE = process.env.DATABASE || 'mongodb://localhost:27017/node-reddit-clone';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 require('dotenv').config();
-
+const app = express();
 
 const checkAuth = (req, res, next) => {
     console.log('checking authentication');
     if (typeof req.cookies.nToken === 'undefined' || req.cookies.nToken === null) {
         req.user = null;
+        console.log('no token')
     } else {
         const token = req.cookies.nToken;
         const decodedToken = jwt.decode(token, { complete: true }) || {};
-        console.log(decodedToken);
+        console.log('token found')
         req.user = decodedToken.payload;
     }
 
@@ -34,21 +33,25 @@ app.use(cookieParser());
 app.use(checkAuth);
 
 // database
-mongoose.connect(DATABASE)
+mongoose.connect('mongodb://localhost:27017/node-reddit-clone')
     .then(() => console.log('successfully connected to the database'))
     .catch((err) => console.log('database error => %s', err))
 
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection Error:'));
+mongoose.set('debug', true);
 // schema models
-const User = require('./models/User');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
+const User = require('./models/User');
 
 // view engine
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/layouts');
-
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
+// routes
 app.get('/', async (req, res) => {
     const currentUser = req.user;
+    
     Post.find({}).lean().sort({ 'createdAt': -1 })
         .then((posts) => {
             res.render('posts_index', {
@@ -62,44 +65,42 @@ app.get('/', async (req, res) => {
 });
 app.get('/posts/new', (req, res) => {
     const currentUser = req.user;
-    if(currentUser){
+    if (currentUser) {
         res.render('posts_new', {
             pageTitle: "New post",
             currentUser
         })
-    } else{
+    } else {
         res.render('sign_in', {
             pageTitle: "sign in to your account"
         })
     }
-    
+
 })
-app.get('/posts/:id', async (req, res) => {
-    var url = req.params.id;
+app.get('/posts/:id', (req, res) => {
     const currentUser = req.user;
-    Post
-        .findById(req.params.id).lean().populate('comments')
+
+    Post.findById(req.params.id).lean()
+        .populate('comments').populate('author')
         .then((post) => {
-            res.render('post_show', {
-                post,
-                currentUser
-            })
+            console.log(post);
+            res.render('post_show', { post, currentUser });
         })
         .catch((err) => {
             console.log(err.message);
         });
-})
+});
+
 app.get('/n/:subreddit', (req, res) => {
     const currentUser = req.user;
-    Post.find({ 'subreddit': req.params.subreddit }).lean()
-        .then((posts) => {
-            res.render('posts_index', {
-                posts,
-                currentUser
-            })
-        })
-        .catch((err) => console.log(err))
-})
+    const { subreddit } = req.params;
+    Post.find({ subreddit }).lean().populate('author')
+      .then((posts) => res.render('posts_index', { posts, currentUser }))
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+
 
 app.get('/signup', (req, res) => {
     res.render('sign_up', {
@@ -117,15 +118,37 @@ app.get('/signout', (req, res) => {
 })
 app.post('/posts/new', (req, res) => {
     const { title, url, summary, subreddit } = req.body;
+
     if (!title || !url || !summary || !subreddit) {
         res.render('posts_new', {
             pageTitle: "New post",
             message: "please fill all fields"
         })
     }
-    var newPost = new Post({ title, url, summary, subreddit });
-    newPost.save();
-    res.redirect('/');
+
+    if (req.user) {
+        const userId = req.user._id;
+        var newPost = new Post({ title, url, summary, subreddit });
+        newPost.author = userId;
+      
+        newPost
+            .save()
+            .then(() => User.findById(userId))
+            .then((user) => {
+                user.posts.unshift(newPost);
+                user.save();
+                // REDIRECT TO THE NEW POST
+                return res.redirect(`/posts/${newPost._id}`);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    } else {
+        res.render('sign_in', {
+            pageTitle: 'Sign in to your account'
+        })
+    }
+
 })
 
 

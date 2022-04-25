@@ -16,7 +16,8 @@
         {{#if post}}
         <div class="posts-show-card">
             <h1>{{post.title}}</h1>
-            <i>{{post.createdAt}}</i>
+            <p>{{post.author.username}}</p>
+            <i>{{dateFormat post.createdAt format}}</i>
             <p>{{post.summary}}</p>
         </div>
         {{/if}} 

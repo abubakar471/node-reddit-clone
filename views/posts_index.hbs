@@ -28,6 +28,7 @@
             {{#each posts}}
             <div class="posts-card">
                 <a href="/posts/{{this._id}}">{{title}}</a>
+                <p><small>{{this.author}}</small></p>
                 <p><a href="/n/{{this.subreddit}}">{{this.subreddit}}</a></p>
             </div>
             {{/each}}
